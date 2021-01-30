@@ -48,13 +48,15 @@ class ParkingPage{
         return costText;
     }
 
+
     async getPM(page){
         const pmRadio = await page.$$('input[name="LeavingTimeAMPM"]');
         pmRadio[1].click();
         
         
     }
-    
+
+
 }
 
 module.exports = ParkingPage;
