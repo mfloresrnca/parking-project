@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha principal.js --recursive test/ --timeout 30000"
+    "test": "mocha index.js --recursive test/ --timeout 30000"
   },
   "keywords": [],
   "author": "Mayra Flores",

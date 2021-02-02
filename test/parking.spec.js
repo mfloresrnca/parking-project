@@ -1,9 +1,6 @@
-const puppeteer = require('puppeteer');
-const { expect } = require('chai');
 const ParkingPage = require('./pages/parkingPage');
 
 describe('Parking Cost Calculator page',()=> {
-    let browser;
     let page;
     let parkingPage;
     let parkingTitle;
@@ -16,7 +13,6 @@ describe('Parking Cost Calculator page',()=> {
   
 
     before(async () => {
-        browser = await puppeteer.launch({headless:false});
         page = await browser.newPage()
         parkingPage = new ParkingPage(page);
         await parkingPage.open(page);
@@ -30,8 +26,11 @@ describe('Parking Cost Calculator page',()=> {
 
     describe('Valet Parking option', async()=>{
        
-        it("should calcule $12 when parking time takes less than 5 hours",async()=>{
+        before(async () => {
             parkingLot = 'Valet Parking';
+ 
+        });
+        it("should calcule $12 when parking time takes less than 5 hours",async()=>{         
             startDate = '01/27/2021';
             startTime = '9';
             leavingDate = '01/27/2021';
@@ -49,7 +48,6 @@ describe('Parking Cost Calculator page',()=> {
     
         
         it("should calcule $12 when parking time takes 5 hours",async()=>{
-            parkingLot = 'Valet Parking';
             startDate = '01/27/2021';
             startTime = '6';
             leavingDate = '01/27/2021';
@@ -66,7 +64,6 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should calcule $18 when parking time takes more than 5 hours",async()=>{
-            parkingLot = 'Valet Parking';
             startDate = '01/27/2021';
             startTime = '7';
             leavingDate = '01/27/2021';
@@ -84,7 +81,6 @@ describe('Parking Cost Calculator page',()=> {
         });
         
         it("should calcule $36 when parking time takes 2 days",async()=>{
-            parkingLot = 'Valet Parking';
             startDate = '01/27/2021';
             startTime = '7';
             leavingDate = '01/29/2021';
@@ -100,7 +96,6 @@ describe('Parking Cost Calculator page',()=> {
         });       
     
         it("should display an error message when leaving day comes before entry day",async()=>{
-            parkingLot = 'Valet Parking';
             startDate = '01/28/2021';
             startTime = '7';
             leavingDate = '01/27/2021';
@@ -116,27 +111,27 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should display an error message when leaving time comes before entry time",async()=>{
-            parkingLot = 'Valet Parking';
             startDate = '01/27/2021';
             startTime = '7';
             leavingDate = '01/27/2021';
             leavingTime = '12';
-            parkingCost = await parkingPage.estimateParkingCost(page,parkingLot,startDate,startTime,leavingDate,leavingTime);
+            parkingCost = await parkingPage.estimateParkingCost(page,parkingLot,startDate,startTime,leavingDate,leavingTime);   
             for(let j = 0; j< parkingCost.length; j++){
                 const currentNode = parkingCost[j];
                 if(j == 1){
                     expect(currentNode).to.eql('ERROR! YOUR LEAVING DATE OR TIME IS BEFORE YOUR STARTING DATE OR TIME');
                     console.log(currentNode);
                 }                
-            }    
+            }             
         });
     
     });
     
     describe('Short-Term Parking option', async()=>{
-        
-        it("should calcule $2 when parking time takes 1 hour",async()=>{
-            parkingLot = 'Short-Term Parking';
+        before(async () => {
+            parkingLot = 'Short-Term Parking'; 
+        });
+        it("should calcule $2 when parking time takes 1 hour",async()=>{           
             startDate = '01/27/2021';
             startTime = '7';
             leavingDate = '01/27/2021';
@@ -152,7 +147,6 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should calcule $3 when parking time takes 1.5 hour",async()=>{
-            parkingLot = 'Short-Term Parking';
             startDate = '01/27/2021';
             startTime = '7';
             leavingDate = '01/27/2021';
@@ -169,9 +163,11 @@ describe('Parking Cost Calculator page',()=> {
     });
     
     describe('Long-Term Garage Parking',async()=>{
+        before(async () => {
+            parkingLot = 'Long-Term Garage Parking'; 
+        });
     
        it("should calculate $2 when parking time takes 1 hour",async()=>{
-            parkingLot = 'Long-Term Garage Parking';
             startDate ='01/29/2021';
             starTime = '7';
             leavingDate = '01/29/2021';
@@ -187,7 +183,6 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should calculate $12 when parking time takes 1 day",async()=>{
-            parkingLot = 'Long-Term Garage Parking';
             startDate ='01/29/2021';
             starTime = '7';
             leavingDate = '01/30/2021';
@@ -203,7 +198,6 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should calculate $36 when parking time takes 3 days",async()=>{
-            parkingLot = 'Long-Term Garage Parking';
             startDate ='01/29/2021';
             starTime = '7';
             leavingDate = '02/01/2021';
@@ -219,7 +213,6 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should calculate $72 when parking time takes 7 days",async()=>{
-            parkingLot = 'Long-Term Garage Parking';
             startDate ='01/29/2021';
             starTime = '7';
             leavingDate = '02/05/2021';
@@ -235,7 +228,6 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should calculate $228 when parking time takes 22 days",async()=>{
-            parkingLot = 'Long-Term Garage Parking';
             startDate ='01/29/2021';
             starTime = '7';
             leavingDate = '02/20/2021';
@@ -252,9 +244,11 @@ describe('Parking Cost Calculator page',()=> {
     });
     
     describe('Long-Term Surface Parking(North Lot)',async()=>{
-    
-        it("should calculate $2 when parking time takes 1 hour",async()=>{
-            parkingLot = 'Long-Term Surface Parking';
+        before(async () => {
+            parkingLot = 'Long-Term Surface Parking'; 
+        });
+
+        it("should calculate $2 when parking time takes 1 hour",async()=>{ 
             startDate ='01/29/2021';
             starTime = '7';
             leavingDate = '01/29/2021';
@@ -270,7 +264,6 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should calculate $12 when parking time takes 1 day and 1 hour",async()=>{
-            parkingLot = 'Long-Term Surface Parking';
             startDate ='01/29/2021';
             starTime = '7';
             leavingDate = '01/30/2021';
@@ -286,7 +279,6 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should calculate $184 when parking time takes 3 weeks and 2 hours",async()=>{
-            parkingLot = 'Long-Term Surface Parking';
             startDate ='01/29/2021';
             starTime = '7';
             leavingDate = '02/19/2021';
@@ -302,7 +294,6 @@ describe('Parking Cost Calculator page',()=> {
         });
     
         it("should calculate $252 when parking time takes 4 weeks and 1 hour",async()=>{
-            parkingLot = 'Long-Term Surface Parking';
             startDate ='01/29/2021';
             starTime = '7';
             leavingDate = '02/27/2021';
@@ -321,12 +312,11 @@ describe('Parking Cost Calculator page',()=> {
    
 
     describe('Economy Lost Parking', async()=>{
-
-        after(async()=>{
-            await browser.close();
+        before(async () => {
+            parkingLot = 'Economy Parking'; 
         });
-        it("should calculate $2 when parking time takes 1 hour",async()=>{
-            parkingLot = 'Economy Parking';
+
+        it("should calculate $2 when parking time takes 1 hour",async()=>{           
             startDate = '01/29/2021';
             startTime = '7';
             leavingDate = '01/29/2021';
@@ -342,7 +332,6 @@ describe('Parking Cost Calculator page',()=> {
         });
 
         it("should calculate $15 when parking time takes 1 day and 3 hours",async()=>{
-            parkingLot = 'Economy Parking';
             startDate = '01/29/2021';
             startTime = '09';
             leavingDate = '01/30/2021';
@@ -359,7 +348,6 @@ describe('Parking Cost Calculator page',()=> {
         });
 
         it("should calculate $54 when parking time takes 1 week",async()=>{
-            parkingLot = 'Economy Parking';
             startDate = '01/29/2021';
             startTime = '09';
             leavingDate = '02/05/2021';
@@ -375,7 +363,6 @@ describe('Parking Cost Calculator page',()=> {
         });
 
         it("should calculate $174 when parking time takes 3 weeks, 1 day and 2 hours",async()=>{
-            parkingLot = 'Economy Parking';
             startDate = '01/29/2021';
             startTime = '09';
             leavingDate = '02/20/2021';
@@ -389,6 +376,8 @@ describe('Parking Cost Calculator page',()=> {
                 }            
             } 
         });
+
+
 
     });
 });
