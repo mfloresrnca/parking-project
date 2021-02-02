@@ -9,6 +9,6 @@ Puppeteer
 
 Instructions
 
-git clone 
+git clone https://github.com/mfloresrnca/parking-project.git
 npm install to install dependencies
 npm test to run test
